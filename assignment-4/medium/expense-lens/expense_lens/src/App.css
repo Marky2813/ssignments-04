@@ -1,0 +1,24 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+th, td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 0.2rem;
+}
+
+tr:nth-child(even) {
+  /* every td element which is a even child of it's parent */
+  background-color: #535353;
+}
