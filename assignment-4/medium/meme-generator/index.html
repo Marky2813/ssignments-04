@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    canvas { border: 1px solid #ccc; cursor: text; display: block; }
+  </style>
+</head>
+<body>
+  <input type="file" id="imgupload" accept="image/*"> 
+  <input type="text" id="topText" placeholder="toptext">
+  <input type="text" id="bottomText" placeholder="bottomtext">
+  <canvas id="myCanvas" width="500" height="800"></canvas>
+  <button id="downloadMeme">download meme</button>
+  <script>
+    const imgUpload = document.getElementById("imgupload");
+    const topText = document.getElementById("topText");
+    const bottomText = document.getElementById("bottomText");
+    const canvas = document.getElementById("myCanvas");
+    const downloadButton = document.getElementById("downloadMeme")
+    const ctx = canvas.getContext('2d');
+
+    let uploadImage; 
+    imgUpload.addEventListener("change", (event) => {
+      const reader = new FileReader();
+      reader.onload = function () {
+        uploadImage = new Image();
+        uploadImage.src = reader.result;
+        uploadImage.onload = () => drawMeme()
+      }
+      reader.readAsDataURL(event.target.files[0])
+    })
+
+    function drawMeme() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(uploadImage, 0, 0, canvas.width, canvas.height)
+
+      ctx.font = '20px Arial';
+      ctx.fillStyle = 'black'; 
+
+      ctx.fillText(topText.value, canvas.width/2, 40)
+      ctx.fillText(bottomText.value, canvas.width/2, canvas.height - 20)
+    }
+
+    topText.addEventListener('input', drawMeme)
+    bottomText.addEventListener('input', drawMeme)
+
+    downloadButton.addEventListener('click', () => {
+      const link  = document.createElement('a');
+      link.download = 'meme.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    })
+      
+  </script>
+  <!-- for multiple texts what can we do, how do we make them draggable and then change the font and the color 
+   we can store the text string as key and pos value as pair. getting the right text poition right everytime will going to be quite an issue. what is the soltuion to it, first problem which needs to be solved is that mulitple texts at the same time. we need to create a list of text pos and text strings. using the array we are able to add multiple texts but the problem is editng and making them draggable etc. 
+  -->
+  
+</body>
+</html>
+
+
+    <!-- let textPos = [];
+    let i = 0;
+    let textString = ''; 
+
+    canvas.addEventListener("click", (e) => {
+      let coordCanvas = canvas.getBoundingClientRect();
+      //this returns an object which has the metadata about the position of the canvas relative to the viewport
+      textPos.push({
+        x: e.clientX - coordCanvas.left,
+        y: e.clientY - coordCanvas.top 
+      })
+      i = textPos.length - 1;
+      textString = '';
+      render()
+    })
+
+    document.addEventListener("keydown", (e) => {
+      if(!textPos[i]) {
+        return;
+      }
+
+      if(e.key === 'Enter') {
+        textPos[i].x = null;
+        textPos[i].y = null;
+        return
+      } else if(e.key === 'Backspace') {
+        textString = textString.slice(0, -1);
+      } else {
+        textString += e.key;
+      }
+
+      render()
+    })
+
+    function render() {
+      if(!textPos[i]) return;
+
+      ctx.font = '20px Arial';
+      ctx.fillStyle = 'black'; 
+      ctx.fillText(textString, textPos[i].x, textPos[i].y); 
+    } -->
