@@ -1,0 +1,15 @@
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
+button {
+  background-color: aqua;
+}
+
+.active {
+  background-color: red;
+}

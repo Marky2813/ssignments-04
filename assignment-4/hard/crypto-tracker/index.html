@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <div class="coins_list"></div>
+  <div class="pagination"></div>
+ 
+ <script>
+    const pagination = document.querySelector(".pagination");
+    let listt = document.querySelector(".coins_list")
+    let intervalId;
+
+    const totalpages = 5;
+    let currentpage = 1 
+
+    function buildPagination() {
+      pagination.innerHTML = '';
+      for(let i = 1; i < totalpages; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = i;
+        if(i === currentpage) btn.classList.add("active");
+        btn.addEventListener("click", () => {
+          currentpage = i; 
+          buildPagination();
+          fetchCoinGecko(); 
+        })
+        pagination.append(btn);
+      }
+    }
+
+    function resetInterval() {
+      clearInterval(intervalId)
+      intervalId = setInterval(fetchCoinGecko,  5000)
+    }
+
+
+
+    async function fetchCoinGecko() {
+      listt.innerHTML='';
+      let data = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=inr&order=market_cap_desc&per_page=100&page=${currentpage}&x_cg_demo_api_key=CG-jLUQdHbRAzMYDYBME44PDpgz`)
+      if(!data.ok) throw new Error('Failed to fetch data')
+      const realData = await data.json();
+      console.log(realData)
+      realData.forEach((e) => {
+       const myDiv = document.createElement("div")
+       const div24h = document.createElement("div");
+       div24h.innerText = e.price_change_percentage_24h;
+       if(e.price_change_percentage_24h < 0) {
+        div24h.classList.add("negative") 
+       } else {
+        div24h.classList.add("positive")
+       }
+       myDiv.innerText = `${e.current_price}, ${e.name}`;
+       myDiv.append(div24h)
+       listt.append(myDiv) 
+      })
+    }
+    fetchCoinGecko();
+    buildPagination();
+    resetInterval();
+    </script>
+</body>
+</html>
+
+
+     <!-- i think instead of doing this, we need to use the fetch call in a setInterval which automatically. all of it is fine but the thing is that right now we are just getting one page, how do i get multiple pages, 
+    // -first see how to add colors, 
+    // - then how to make it run in intervals of 5 seconds
+    // - then make currency waala toggle 
+    // - see how can we implement those pages thingy.    -->

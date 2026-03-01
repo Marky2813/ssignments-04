@@ -1,7 +1,7 @@
 # Crypto-Tracker
 
 ## Overview
-Build a Crypto-Tracker dashboard that displays live cryptocurrency prices.
+Build a Crypto-Tracker dashboard that displays live cryptocurrency prices. 
 
 Fetch data from the CoinGecko API and display the top cryptocurrencies in a structured table or card layout.  
 Users should be able to search cryptocurrencies in real time.

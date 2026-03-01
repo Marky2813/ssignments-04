@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <!-- <div class="draghorahunmai" draggable="true"><h1>draggable text</h1></div> -->
+  <!-- now we need to make drop zones -->
+  <div class="dropzones">
+    <div class="dropzone one">
+      <h1>
+        new habit
+        <button onclick="handleSubmit()">create</button>
+      </h1>
+    </div>
+    <div class="dropzone two"></div>
+    <div class="dropzone three"></div>
+  </div>
+
+  <script>
+    function handleSubmit() {
+      let habitInfo = document.createElement("input");
+      habitInfo.type = "text";
+      habitInfo.placeholder = "Add some habit"
+      let newHabit = document.querySelector(".one");
+      let createHabit = document.createElement("button");
+      createHabit.innerText = "create habit";
+      createHabit.onclick = fnCreateHabit;
+      newHabit.append(habitInfo);
+      newHabit.append(createHabit)
+
+      function fnCreateHabit() {
+        let habitDiv = document.createElement("div");
+        newHabit.removeChild(habitInfo);
+        newHabit.removeChild(createHabit);
+        habitDiv.innerText = habitInfo.value;
+        habitDiv.draggable = "true"
+        const removeBtn = document.createElement("button");
+  removeBtn.textContent = "❌";
+        habitDiv.append(removeBtn);
+        removeBtn.addEventListener("click", () => {
+    habitDiv.remove();
+  });
+        newHabit.append(habitDiv)
+
+      }
+
+    }
+    let dragItem;
+    document.addEventListener("dragstart", (e) => {
+      console.log(e);
+      dragItem = e.target
+    })
+
+    let dropZoneSet = document.querySelectorAll(".dropzone")
+
+    dropZoneSet.forEach((dropzone) => {
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+
+      dropzone.addEventListener("drop", () => {
+        dropzone.appendChild(dragItem);
+      });
+    })
+  </script>
+</body>
+
+</html>

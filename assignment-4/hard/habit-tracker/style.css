@@ -1,0 +1,33 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.draghorahunmai {
+  background-color: aqua;
+  display: inline-block;
+}
+
+.one {
+  height: 200px;
+  width: 300px;
+  background-color: beige;
+}
+
+.two {
+  height: 200px;
+  width: 300px;
+  background-color: beige;
+}
+
+.three {
+  height: 200px;
+  width: 300px;
+  background-color: beige;
+}
+
+.dropzones {
+  display: flex;
+  gap: 50px;
+  margin-top: 20px;
+}
