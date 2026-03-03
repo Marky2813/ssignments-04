@@ -1,0 +1,10 @@
+#resumeContainer {
+  width: 600px;
+  min-height: 800px;
+  background-color: beige;
+}
+
+.resume-container {
+  background-color: blueviolet;
+  margin: 5px;
+}

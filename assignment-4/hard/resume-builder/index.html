@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<!-- now we need to take the section as the heading and description as the body aur add section pe we need to run a funtion which adds this to the resume container, these heading and description will be in a container which is draggable. then figure out how to make them editbale -->
+
+<body>
+  <h1>Resume Builder</h1>
+  <div class="addSection">
+    <form id="sectionForm">
+      <label for="section">Add Section:
+      </label>
+      <select id="section" name="section">
+        <option>Education</option>
+        <option>Skills</option>
+        <option>Projects</option>
+      </select>
+      <button onclick="addOption()" type="button">Add New Option</button>
+      <br>
+      <label for="description">Add Description</label>
+      <input id="description" type="text" placeholder="Add Details" name="description">
+      <br>
+      <button type="submit">Add Section</button>
+    </form>
+  </div>
+  <div id="resumeContainer" class="dropzone">
+  </div>
+  <script>
+    const form = document.getElementById("sectionForm");
+    const dropzone = document.querySelector(".dropzone");
+    let dragItem;
+
+    form.addEventListener("submit", (e) => {
+      // get the data from the select and the input tag, create a container. set it as draggable. 
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      const section = formData.get("section");
+      const description = formData.get("description");
+
+      const container = document.createElement("div");
+      container.classList.add("resume-container");
+      container.setAttribute("draggable", "true");
+
+      container.innerHTML = `
+  <h1 contenteditable="true">${section}</h1>
+  <p contenteditable="true">${description}</p>
+  <button class='remove-section'>remove</button>
+`;
+
+      resumeContainer.append(container);
+    })
+
+    document.addEventListener("click", (e) => {
+      if(e.target.classList.contains("remove-section")) {
+        e.target.closest(".resume-container").remove();
+      }
+    })
+    document.addEventListener("dragstart", (e) => {
+      if (e.target.classList.contains("resume-container")) {
+        dragItem = e.target;
+        dragItem.classList.add("dragging")
+      }
+    })
+
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      //most elements do not allow dropping, so if we do not prevent the default behaviour in the dragover, then woh drop event fire karega hee nahi. 
+    })
+
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault() //to prevent weird behaviour like reloading etc, 
+
+      const afterElement = getDragAfterElement(dropzone, e.clientY);
+
+      if (!afterElement) {
+        dropzone.append(dragItem);
+      } else {
+        afterElement.before(dragItem)
+      }
+    })
+    document.addEventListener("dragend", (e) => {
+      if (e.target.classList.contains("resume-container")) {
+        e.target.classList.remove("dragging")
+      }
+    })
+    function addOption() {
+      const optionList = document.getElementById("section");
+      const value = prompt("add new section");
+      const opt = document.createElement("option");
+      opt.innerText = value;
+      //this was happening due to the default behaviour of the button 
+      optionList.append(opt);
+    }
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll(".resume-container:not(.dragging)")];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element
+    }
+  </script>
+</body>
+
+</html>

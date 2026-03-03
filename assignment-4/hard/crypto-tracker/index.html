@@ -42,7 +42,8 @@
 
 
     async function fetchCoinGecko() {
-      listt.innerHTML='';
+      try {
+        listt.innerHTML='';
       let data = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=inr&order=market_cap_desc&per_page=100&page=${currentpage}&x_cg_demo_api_key=CG-jLUQdHbRAzMYDYBME44PDpgz`)
       if(!data.ok) throw new Error('Failed to fetch data')
       const realData = await data.json();
@@ -60,6 +61,11 @@
        myDiv.append(div24h)
        listt.append(myDiv) 
       })
+      } catch {
+        listt.innerHTML = '<h1>failed to load</h1>'
+        console.error();
+      }
+      
     }
     fetchCoinGecko();
     buildPagination();
